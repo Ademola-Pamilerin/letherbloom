@@ -17,10 +17,11 @@ export default function FeatureCard({
     <motion.article
       whileInView={{ y: [20, 0], opacity: [0, 1] }}
       transition={{ duration: 0.6 + delay * 0.1 }}
-      className="rounded-xl bg-white/60 p-6 shadow"
     >
-      <h3 className="mb-2 text-xl font-semibold text-rose-700">{title}</h3>
-      <p className="text-sm text-zinc-700">{description}</p>
+      <div className="rounded-xl bg-white/60 p-6 shadow">
+        <h3 className="mb-2 text-xl font-semibold text-rose-700">{title}</h3>
+        <p className="text-sm text-zinc-700">{description}</p>
+      </div>
     </motion.article>
   );
 }

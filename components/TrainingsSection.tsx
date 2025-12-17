@@ -12,11 +12,12 @@ function TrainingTypeCard({ title, description, icon }: TrainingTypeProps) {
   return (
     <motion.div
       whileHover={{ y: -8 }}
-      className="overflow-hidden rounded-2xl bg-gradient-to-br from-gray-300 to-gray-400 p-6 shadow-lg text-white"
     >
-      <div className="mb-4 text-4xl">{icon}</div>
-      <h3 className="text-xl font-bold">{title}</h3>
-      <p className="mt-2 text-sm opacity-90">{description}</p>
+      <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-gray-300 to-gray-400 p-6 shadow-lg text-white">
+        <div className="mb-4 text-4xl">{icon}</div>
+        <h3 className="text-xl font-bold">{title}</h3>
+        <p className="mt-2 text-sm opacity-90">{description}</p>
+      </div>
     </motion.div>
   );
 }
@@ -47,14 +48,16 @@ export default function TrainingsSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
+         
         >
+          <div className="mb-12 text-center">
           <p className="text-sm font-semibold uppercase tracking-widest text-rose-600">
             Training Options
           </p>
           <h2 className="mt-2 text-4xl font-bold text-zinc-900">
             Trainings
           </h2>
+          </div>
         </motion.div>
 
         <div className="grid gap-6 md:grid-cols-3">

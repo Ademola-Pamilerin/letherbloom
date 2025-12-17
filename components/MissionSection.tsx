@@ -10,8 +10,8 @@ export default function MissionSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="text-center"
         >
+          <div className="text-center">
           <div className="mb-6 text-6xl md:text-7xl">✦</div>
           <h2 className="text-5xl font-black leading-tight md:text-6xl">
             Your Body is <span className="text-rose-400">Your Temple</span>
@@ -25,10 +25,12 @@ export default function MissionSection() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="mt-8 rounded-full border-2 border-white px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-zinc-900"
           >
-            Start Your Journey
+            <button className="mt-8 rounded-full border-2 border-white px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-zinc-900">
+              Start Your Journey
+            </button>
           </motion.button>
+          </div>
         </motion.div>
       </div>
     </section>

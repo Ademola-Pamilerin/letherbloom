@@ -21,10 +21,9 @@ export default function MobileMenu() {
   return (
     <>
       {/* Mobile Menu Button */}
-      <motion.button
-        whileTap={{ scale: 0.95 }}
+      <button
+        className="md:hidden active:scale-95"
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden"
       >
         <svg
           className="h-6 w-6 text-zinc-900"
@@ -48,7 +47,7 @@ export default function MobileMenu() {
             />
           )}
         </svg>
-      </motion.button>
+      </button>
 
       {/* Backdrop with blur */}
       <AnimatePresence>
@@ -58,9 +57,12 @@ export default function MobileMenu() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            onClick={() => setIsOpen(false)}
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
-          />
+          >
+            <div
+              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+              onClick={() => setIsOpen(false)}
+            />
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -71,57 +73,53 @@ export default function MobileMenu() {
             initial={{ x: "-100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: "-100%", opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed left-0 top-0 z-50 h-screen w-64 bg-white shadow-2xl md:hidden"
           >
-            <div className="flex flex-col p-6">
-              {/* Close Button */}
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsOpen(false)}
-                className="mb-8 self-end"
-              >
-                <svg
-                  className="h-6 w-6 text-zinc-900"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            <div className="fixed left-0 top-0 z-50 h-screen w-64 bg-white shadow-2xl md:hidden">
+              <div className="flex flex-col p-6">
+                {/* Close Button */}
+                <button
+                  className="mb-8 self-end active:scale-95"
+                  onClick={() => setIsOpen(false)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </motion.button>
-
-              {/* Navigation Items */}
-              <nav className="space-y-4">
-                {navItems.map((item, index) => (
-                  <motion.a
-                    key={item.name}
-                    href={item.href}
-                    onClick={handleLinkClick}
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="block text-lg font-semibold text-zinc-900 transition hover:text-rose-600"
+                  <svg
+                    className="h-6 w-6 text-zinc-900"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    {item.name}
-                  </motion.a>
-                ))}
-              </nav>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
 
-              {/* CTA Button */}
-              <motion.button
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8 w-full rounded-full bg-rose-600 px-6 py-3 font-semibold text-white transition hover:bg-rose-700"
-              >
-                Join Today
-              </motion.button>
+                {/* Navigation Items */}
+                <nav className="space-y-4">
+                  {navItems.map((item, index) => (
+                    <div key={item.name}>
+                      <Link
+                        href={item.href}
+                        onClick={handleLinkClick}
+                        className="block text-lg font-semibold text-zinc-900 transition hover:text-rose-600"
+                      >
+                        {item.name}
+                      </Link>
+                    </div>
+                  ))}
+                </nav>
+
+                {/* CTA Button */}
+                <div
+                  className="animate-in slide-in-from-bottom-5 fade-in duration-500"
+                >
+                  <button className="mt-8 w-full rounded-full bg-rose-600 px-6 py-3 font-semibold text-white transition hover:bg-rose-700">
+                    Join Today
+                  </button>
+                </div>
+              </div>
             </div>
           </motion.div>
         )}

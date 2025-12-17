@@ -40,40 +40,39 @@ export default function Footer() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="md:col-span-1"
           >
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg ">
-                <Image
-                  src="/hero-arm.svg"
-                  alt="letHerBloom Logo"
-                  width={40}
-                  height={40}
-                  className="h-8 w-8"
-                />
-              </div>
-              <span className="text-2xl font-bold text-rose-500">letHerBloom</span>
-            </Link>
-            <p className="mt-4 text-zinc-400">
-              Empowering women through strength, mobility, and confidence-building workouts.
-            </p>
-            <div className="mt-6">
-              <p className="mb-3 text-sm font-semibold text-zinc-300">Follow Us</p>
-              <div className="flex gap-3">
-                {socialMedia.map((social) => (
-                  <motion.a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-600 text-sm font-bold transition hover:bg-rose-500"
-                    title={social.name}
-                  >
-                    {social.icon}
-                  </motion.a>
-                ))}
+            <div className="md:col-span-1">
+              <Link href="/" className="flex items-center gap-2">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg ">
+                  <Image
+                    src="/hero-arm.svg"
+                    alt="letHerBloom Logo"
+                    width={40}
+                    height={40}
+                    className="h-8 w-8"
+                  />
+                </div>
+                <span className="text-2xl font-bold text-rose-500">letHerBloom</span>
+              </Link>
+              <p className="mt-4 text-zinc-400">
+                Empowering women through strength, mobility, and confidence-building workouts.
+              </p>
+              <div className="mt-6">
+                <p className="mb-3 text-sm font-semibold text-zinc-300">Follow Us</p>
+                <div className="flex gap-3">
+                  {socialMedia.map((social) => (
+                    <Link
+                      key={social.name}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-600 text-sm font-bold transition hover:bg-rose-500"
+                      title={social.name}
+                    >
+                      {social.icon}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
@@ -84,21 +83,23 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">
-              Quick Links
-            </h3>
-            <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-zinc-400 transition hover:text-rose-500"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div>
+              <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">
+                Quick Links
+              </h3>
+              <ul className="space-y-2">
+                {quickLinks.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-zinc-400 transition hover:text-rose-500"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </motion.div>
 
           {/* Programs */}
@@ -107,24 +108,26 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">
-              Programs
-            </h3>
-            <ul className="space-y-2">
-              {[
-                "Personal Training",
-                "Group Classes",
-                "Functional Training",
-                "Custom Plans",
-                "Nutrition Guide",
-              ].map((program) => (
-                <li key={program}>
-                  <a href="#" className="text-zinc-400 transition hover:text-rose-500">
-                    {program}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div>
+              <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">
+                Programs
+              </h3>
+              <ul className="space-y-2">
+                {[
+                  "Personal Training",
+                  "Group Classes",
+                  "Functional Training",
+                  "Custom Plans",
+                  "Nutrition Guide",
+                ].map((program) => (
+                  <li key={program}>
+                    <Link href="#" className="text-zinc-400 transition hover:text-rose-500">
+                      {program}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </motion.div>
 
           {/* Contact Info */}
@@ -133,33 +136,35 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">
-              Contact
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <p className="text-sm text-zinc-400">Email</p>
-                <a
-                  href="mailto:hello@letherbloom.com"
-                  className="text-white transition hover:text-rose-500"
-                >
-                  hello@letherbloom.com
-                </a>
-              </li>
-              <li>
-                <p className="text-sm text-zinc-400">Phone</p>
-                <a
-                  href="tel:+15551234567"
-                  className="text-white transition hover:text-rose-500"
-                >
-                  +1 (555) 123-4567
-                </a>
-              </li>
-              <li>
-                <p className="text-sm text-zinc-400">Location</p>
-                <p className="text-white">San Francisco, CA</p>
-              </li>
-            </ul>
+            <div>
+              <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-white">
+                Contact
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <p className="text-sm text-zinc-400">Email</p>
+                  <Link
+                    href="mailto:hello@letherbloom.com"
+                    className="text-white transition hover:text-rose-500"
+                  >
+                    hello@letherbloom.com
+                  </Link>
+                </li>
+                <li>
+                  <p className="text-sm text-zinc-400">Phone</p>
+                  <Link
+                    href="tel:+15551234567"
+                    className="text-white transition hover:text-rose-500"
+                  >
+                    +1 (555) 123-4567
+                  </Link>
+                </li>
+                <li>
+                  <p className="text-sm text-zinc-400">Location</p>
+                  <p className="text-white">San Francisco, CA</p>
+                </li>
+              </ul>
+            </div>
           </motion.div>
         </div>
 
@@ -174,23 +179,22 @@ export default function Footer() {
 
           <div className="flex gap-6">
             {legalLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
                 className="text-sm text-zinc-400 transition hover:text-rose-500"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </div>
 
-          <motion.a
+          <Link
             href="#"
-            whileHover={{ y: -2 }}
-            className="text-sm text-zinc-400 transition hover:text-rose-500"
+            className="text-sm text-zinc-400 transition hover:text-rose-500 hover:-translate-y-0.5"
           >
             Back to Top ↑
-          </motion.a>
+          </Link>
         </div>
       </div>
     </footer>

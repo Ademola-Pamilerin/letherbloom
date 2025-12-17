@@ -13,24 +13,25 @@ function TestimonialCard({ name, role, content, avatar }: TestimonialProps) {
   return (
     <motion.div
       whileHover={{ y: -4 }}
-      className="flex flex-col rounded-2xl bg-white p-8 shadow-lg h-full"
     >
-      <div className="mb-6 flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-rose-400 to-rose-600 text-2xl font-bold text-white">
-          {avatar}
+      <div className="flex flex-col rounded-2xl bg-white p-8 shadow-lg h-full">
+        <div className="mb-6 flex items-center gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-rose-400 to-rose-600 text-2xl font-bold text-white">
+            {avatar}
+          </div>
+          <div>
+            <h4 className="font-bold text-zinc-900">{name}</h4>
+            <p className="text-sm text-zinc-600">{role}</p>
+          </div>
         </div>
-        <div>
-          <h4 className="font-bold text-zinc-900">{name}</h4>
-          <p className="text-sm text-zinc-600">{role}</p>
+        <p className="flex-grow text-zinc-700">{content}</p>
+        <div className="mt-4 flex gap-1">
+          {[...Array(5)].map((_, i) => (
+            <span key={i} className="text-rose-500">
+              ★
+            </span>
+          ))}
         </div>
-      </div>
-      <p className="flex-grow text-zinc-700">{content}</p>
-      <div className="mt-4 flex gap-1">
-        {[...Array(5)].map((_, i) => (
-          <span key={i} className="text-rose-500">
-            ★
-          </span>
-        ))}
       </div>
     </motion.div>
   );
@@ -69,23 +70,25 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <section id="testimonials" className="bg-gradient-to-b from-rose-50 to-white py-12">
+    <section id="testimonials" className="bg-linear-to-b from-rose-50 to-white py-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-12 xl:px-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
+
         >
-          <p className="text-sm font-semibold uppercase tracking-widest text-rose-600">
-            Success Stories
-          </p>
-          <h2 className="mt-2 text-4xl font-bold text-zinc-900">
-            Hear From Our Community
-          </h2>
-          <p className="mt-4 text-zinc-600">
-            Real women, real results, real transformations
-          </p>
+          <div className="mb-12 text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-rose-600">
+              Success Stories
+            </p>
+            <h2 className="mt-2 text-4xl font-bold text-zinc-900">
+              Hear From Our Community
+            </h2>
+            <p className="mt-4 text-zinc-600">
+              Real women, real results, real transformations
+            </p>
+          </div>
         </motion.div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

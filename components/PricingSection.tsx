@@ -16,44 +16,47 @@ function PricingTier({
   price,
   features,
   isSelected,
+  onSelect,
 }: PricingTierProps) {
   return (
     <motion.div
       whileHover={{ y: -8 }}
-      className={`rounded-2xl p-8 transition cursor-pointer ${
-        isSelected
+    >
+      <div
+        onClick={onSelect}
+        className={`rounded-2xl p-8 transition cursor-pointer ${isSelected
           ? "scale-105 border-2 border-rose-600 bg-gradient-to-br from-rose-50 to-white shadow-2xl"
           : "border border-zinc-200 bg-white shadow-lg"
-      }`}
-    >
-      <h3 className={`text-2xl font-bold ${isSelected ? "text-rose-600" : "text-zinc-900"}`}>
-        {name}
-      </h3>
-      <div className="mt-4">
-        <span className="text-4xl font-black text-zinc-900">${price}</span>
-        <span className="text-zinc-600">/month</span>
-      </div>
+          }`}>
+        <h3 className={`text-2xl font-bold ${isSelected ? "text-rose-600" : "text-zinc-900"}`}>
+          {name}
+        </h3>
+        <div className="mt-4">
+          <span className="text-4xl font-black text-zinc-900">${price}</span>
+          <span className="text-zinc-600">/month</span>
+        </div>
 
-      <ul className="mt-8 space-y-4">
-        {features.map((feature) => (
-          <li key={feature} className="flex items-center gap-3">
-            <span className="text-rose-600">✓</span>
-            <span className="text-zinc-700">{feature}</span>
-          </li>
-        ))}
-      </ul>
+        <ul className="mt-8 space-y-4">
+          {features.map((feature) => (
+            <li key={feature} className="flex items-center gap-3">
+              <span className="text-rose-600">✓</span>
+              <span className="text-zinc-700">{feature}</span>
+            </li>
+          ))}
+        </ul>
 
-      <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className={`mt-8 w-full rounded-full py-3 font-semibold transition ${
-          isSelected
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <button className={`mt-8 w-full rounded-full py-3 font-semibold transition ${isSelected
             ? "bg-rose-600 text-white shadow-lg"
             : "border border-rose-600 text-rose-600 hover:bg-rose-50"
-        }`}
-      >
-        Choose {name}
-      </motion.button>
+            }`}>
+            Choose {name}
+          </button>
+        </motion.button>
+      </div>
     </motion.div>
   );
 }
@@ -103,15 +106,17 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
+
         >
-          <p className="text-sm font-semibold uppercase tracking-widest text-rose-600">
-            Membership
-          </p>
-          <h2 className="mt-2 text-4xl font-bold text-zinc-900">
-            Choose Your Plan
-          </h2>
-          <p className="mt-4 text-zinc-600">Cancel anytime · 7-day free trial</p>
+          <div className="mb-12 text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-rose-600">
+              Membership
+            </p>
+            <h2 className="mt-2 text-4xl font-bold text-zinc-900">
+              Choose Your Plan
+            </h2>
+            <p className="mt-4 text-zinc-600">Cancel anytime · 7-day free trial</p>
+          </div>
         </motion.div>
 
         <div className="flex justify-center">
@@ -122,10 +127,9 @@ export default function PricingSection() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                onClick={() => setSelectedPlan(tier.name)}
               >
-                <PricingTier 
-                  {...tier} 
+                <PricingTier
+                  {...tier}
                   isSelected={selectedPlan === tier.name}
                   onSelect={() => setSelectedPlan(tier.name)}
                 />

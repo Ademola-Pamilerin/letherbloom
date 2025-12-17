@@ -27,25 +27,24 @@ export default function Navigation() {
 
           <div className="hidden items-center gap-8 md:flex">
             {navItems.map((item) => (
-              <motion.a
+              <Link
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                whileHover={{ scale: 1.05 }}
-                className="text-sm font-medium text-zinc-700 transition hover:text-rose-600"
+                className="group"
               >
-                {item}
-              </motion.a>
+                <span className="text-sm font-medium text-zinc-700 transition hover:text-rose-600 block group-hover:scale-105">
+                  {item}
+                </span>
+              </Link>
             ))}
           </div>
 
           <div className="hidden md:block">
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className="rounded-full bg-rose-600 px-6 py-2 text-sm font-semibold text-white shadow-md"
+            <button
+              className="rounded-full bg-rose-600 px-6 py-2 text-sm font-semibold text-white shadow-md transition hover:scale-105 active:scale-95"
             >
               Join Today
-            </motion.button>
+            </button>
           </div>
 
           {/* Mobile Menu */}
