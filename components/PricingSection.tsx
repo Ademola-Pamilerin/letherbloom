@@ -49,7 +49,7 @@ function PricingTier({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <button className={`mt-8 w-full rounded-full py-3 font-semibold transition ${isSelected
+          <button className={`mt-8 w-full rounded-full py-3 px-4 font-semibold transition ${isSelected
             ? "bg-rose-600 text-white shadow-lg"
             : "border border-rose-600 text-rose-600 hover:bg-rose-50"
             }`}>

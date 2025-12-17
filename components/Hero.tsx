@@ -37,7 +37,7 @@ export default function Hero() {
                 href="#plans"
                 className="inline-flex items-center gap-3 rounded-full bg-rose-600 px-5 py-3 text-white shadow-md transition hover:scale-105 active:scale-95"
               >
-                Start Your Free Trial
+                Start Now
               </Link>
 
               <Link

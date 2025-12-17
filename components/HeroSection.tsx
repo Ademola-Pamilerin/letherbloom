@@ -33,7 +33,7 @@ export default function HeroSection() {
                   <button
                     className="rounded-full bg-rose-600 px-8 py-4 font-semibold text-white shadow-lg md:px-10 md:py-5 md:text-lg transition-opacity hover:opacity-90 active:opacity-80"
                   >
-                    Start Free Trial
+                    Join Now
                   </button>
                   <button
                     className="rounded-full border-2 border-rose-600 px-8 py-4 font-semibold text-rose-600 md:px-10 md:py-5 md:text-lg transition-opacity hover:opacity-90 active:opacity-80"
