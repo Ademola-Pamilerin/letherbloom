@@ -47,9 +47,13 @@ export default function MobileMenu() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm md:hidden"
-            onClick={() => setIsOpen(false)}
-          />
+            style={{ position: 'fixed', inset: 0, zIndex: 50 }}
+          >
+            <div
+              className="h-full w-full bg-black/30 backdrop-blur-sm md:hidden"
+              onClick={() => setIsOpen(false)}
+            />
+          </motion.div>
 
           {/* Side Drawer */}
           <motion.div
@@ -57,64 +61,68 @@ export default function MobileMenu() {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed left-0 top-0 z-50 h-dvh w-[85vw] max-w-sm bg-white shadow-2xl md:hidden"
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            style={{ position: 'fixed', left: 0, top: 0, zIndex: 50, height: '100vh' }}
           >
-            <div className="relative flex h-full flex-col p-6">
-              {/* Close Button */}
-              <button
-                className="absolute right-4 top-4 p-2 text-zinc-500 transition hover:text-zinc-900 active:scale-95"
-                onClick={() => setIsOpen(false)}
-              >
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            <div
+              className="h-dvh w-[85vw] max-w-sm bg-white shadow-2xl md:hidden"
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              <div className="relative flex h-full flex-col p-6">
+                {/* Close Button */}
+                <button
+                  className="absolute right-4 top-4 p-2 text-zinc-500 transition hover:text-zinc-900 active:scale-95"
+                  onClick={() => setIsOpen(false)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-
-              {/* Top: Logo & Name */}
-              <div className="mt-8 flex flex-col items-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-lg">
-                  <Image
-                    src="/hero-arm.svg"
-                    alt="letHerBloom Logo"
-                    width={200}
-                    height={200}
-                    className="h-auto w-auto"
-                  />
-                </div>
-                <span className="mt-2 text-xl font-bold text-rose-700">letHerBloom</span>
-              </div>
-
-              {/* Center: Navigation Items */}
-              <nav className="flex grow flex-col justify-center space-y-6 text-center">
-                {navItems.map((item) => (
-                  <div key={item.name}>
-                    <Link
-                      href={item.href}
-                      onClick={handleLinkClick}
-                      className="block text-xl font-semibold text-zinc-900 transition hover:text-rose-600"
-                    >
-                      {item.name}
-                    </Link>
-                  </div>
-                ))}
-              </nav>
-
-              {/* Bottom: CTA Button */}
-              <div className="mb-8">
-                <button className="w-full rounded-full bg-rose-600 px-6 py-4 text-lg font-semibold text-white shadow-lg transition hover:bg-rose-700 active:scale-95">
-                  Join Now
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
                 </button>
+
+                {/* Top: Logo & Name */}
+                <div className="mt-8 flex flex-col items-center">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-lg">
+                    <Image
+                      src="/hero-arm.svg"
+                      alt="letHerBloom Logo"
+                      width={200}
+                      height={200}
+                      className="h-auto w-auto"
+                    />
+                  </div>
+                  <span className="mt-2 text-xl font-bold text-rose-700">letHerBloom</span>
+                </div>
+
+                {/* Center: Navigation Items */}
+                <nav className="flex grow flex-col justify-center space-y-6 text-center">
+                  {navItems.map((item) => (
+                    <div key={item.name}>
+                      <Link
+                        href={item.href}
+                        onClick={handleLinkClick}
+                        className="block text-xl font-semibold text-zinc-900 transition hover:text-rose-600"
+                      >
+                        {item.name}
+                      </Link>
+                    </div>
+                  ))}
+                </nav>
+
+                {/* Bottom: CTA Button */}
+                <div className="mb-8">
+                  <button className="w-full rounded-full bg-rose-600 px-6 py-4 text-lg font-semibold text-white shadow-lg transition hover:bg-rose-700 active:scale-95">
+                    Join Now
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
