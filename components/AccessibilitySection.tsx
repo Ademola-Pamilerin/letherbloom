@@ -22,7 +22,7 @@ export default function AccessibilitySection() {
             </h2>
             <p className="mt-6 text-lg text-zinc-700">
               Whether you're a complete beginner or an experienced lifter, we
-              use a variety of equipment and classes to build your skills. Join
+              use a variety of techniques and classes to build your skills. Join
               a thriving community dedicated to your success.
             </p>
 

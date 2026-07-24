@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const images = [
     "/images/Gemini_Generated_Image_251cny251cny251c.png",
-    "/images/Gemini_Generated_Image_8hllxj8hllxj8hll.png",
+    "/images/philosophy-group.png",
     "/images/Gemini_Generated_Image_dlwnq7dlwnq7dlwn.png",
     "/images/Gemini_Generated_Image_douzh7douzh7douz.png",
     "/images/Gemini_Generated_Image_f95rxvf95rxvf95r.png",
