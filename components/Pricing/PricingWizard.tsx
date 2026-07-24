@@ -1,13 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PlansSection from "@/components/PlansSection";
 import PaymentStep from "@/components/Pricing/PaymentStep";
+import { findPlanByName } from "./plansData";
 
 export default function PricingWizard() {
     const [step, setStep] = useState<1 | 2>(1);
     const [selectedPlan, setSelectedPlan] = useState<{ name: string; priceId: string } | null>(null);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const planName = params.get("plan");
+        if (planName) {
+            const plan = findPlanByName(planName);
+            if (plan) {
+                setSelectedPlan({ name: plan.name, priceId: plan.priceId || "" });
+                setStep(2);
+            }
+        }
+    }, []);
 
     const handleSelectPlan = (plan: { name: string; priceId: string }) => {
         setSelectedPlan(plan);
@@ -18,6 +31,11 @@ export default function PricingWizard() {
     const handleBack = () => {
         setStep(1);
         setSelectedPlan(null);
+        // Clear query parameter if user goes back
+        if (window.history.pushState) {
+            const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.pushState({path:newurl}, '', newurl);
+        }
     };
 
     return (

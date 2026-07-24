@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface PlanCardProps {
@@ -38,11 +35,12 @@ export default function PlanCard({
 }: PlanCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+  const router = useRouter();
 
-  const handleSubscribe = async () => {
+  const handleSubscribe = () => {
     // Handle Organization redirect immediately
     if (isOrganization) {
-      window.location.href = "/pricing/organization";
+      router.push("/pricing/organization");
       return;
     }
 
@@ -52,48 +50,8 @@ export default function PlanCard({
       return;
     }
 
-    setIsLoading(true);
-    try {
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error("Stripe failed to load");
-
-      // Use passed priceId or fallback to dev placeholder logic if missing
-      let finalPriceId = priceId;
-
-      if (!finalPriceId) {
-        // Fallback mapping if not provided via props (for safety/dev)
-        if (name === "Basic") finalPriceId = "price_1Basic";
-        else if (name === "Elite") finalPriceId = "price_1Elite";
-        else finalPriceId = "price_test_" + name.replace(/\s+/g, '');
-      }
-
-      console.log("Subscribing to:", name, "PriceID:", finalPriceId, "Duration:", eliteDuration);
-
-      const res = await fetch("/api/checkout_sessions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          priceId: finalPriceId,
-          planName: name,
-          duration: (name === "Elite" || name === "Personal Training") ? eliteDuration : undefined
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.error) throw new Error(data.error);
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        toast.error("No checkout URL returned");
-      }
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.message || "Something went wrong sending you to checkout");
-    } finally {
-      setIsLoading(false);
-    }
+    // Programmatic navigation — no full page refresh
+    router.push(`/pricing?plan=${encodeURIComponent(name)}&priceId=${encodeURIComponent(priceId || "")}`);
   };
 
   return (

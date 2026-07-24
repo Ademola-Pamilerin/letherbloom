@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PlanCard from "./PlanCard";
+import { TRAINING_PLANS } from "./Pricing/plansData";
 
 export default function PricingSection({
   selectedType,
@@ -10,82 +11,7 @@ export default function PricingSection({
   onTypeChange: (type: "personal" | "group" | "functional") => void;
 }) {
 
-  const getTiers = () => {
-    switch (selectedType) {
-      case "personal":
-        return [
-          {
-            name: "Personal Training",
-            price: "40",
-            priceNote: "per session",
-            description: "One-on-one sessions tailored specifically to your goals and pace.",
-            features: [
-              "Custom workout plans",
-              "Progress tracking & analytics",
-              "Community access",
-              "Priority support",
-              "Monthly form check-ins",
-              "Direct messaging with trainer",
-            ],
-            priceId: "price_1Elite",
-            featured: true,
-          },
-        ];
-      case "group":
-        return [
-          {
-            name: "Individual Group",
-            price: "40",
-            priceNote: "per session",
-            description: "Join our vibrant community for group training.",
-            features: [
-              "2-3 Sessions per week.",
-              "Unlimited group classes",
-              "Community events",
-              "Group progress tracking",
-              "Expert instruction",
-
-            ],
-            priceId: "price_group_ind",
-            featured: true,
-          },
-          {
-            name: "Corporate Group",
-            price: "29.99",
-            priceNote: "per group session",
-            description: "Structured group training for organizations.",
-            features: [
-              "Dedicated class slots",
-              "Team building focus",
-              "Usage analytics",
-              "Custom onboarding",
-            ],
-            isOrganization: true,
-          },
-        ];
-      case "functional":
-        return [
-          {
-            name: "Functional Core",
-            price: "49",
-            priceNote: "per session",
-            description: "Master real-world movement and strength.",
-            features: [
-              "Mobility workshops",
-              "Strength & agility focus",
-              "Real-world application guides",
-              "Advanced equipment access",
-            ],
-            priceId: "price_functional_core",
-            featured: true,
-          },
-        ];
-      default:
-        return [];
-    }
-  };
-
-  const tiers = getTiers();
+  const tiers = TRAINING_PLANS[selectedType] || [];
 
   return (
     <section id="plans" className="bg-gradient-to-b from-white to-rose-50 py-20 pb-24">

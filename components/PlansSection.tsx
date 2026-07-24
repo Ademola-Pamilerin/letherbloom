@@ -1,6 +1,31 @@
+"use client";
+
 import { useState } from "react";
 import PlanCard from "./PlanCard";
-import Link from "next/link";
+import { TRAINING_PLANS } from "./Pricing/plansData";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+
+const trainingOptions = [
+  {
+    type: "personal" as const,
+    label: "Personal Training",
+    description: "One-on-one sessions tailored to your goals",
+    icon: "💪",
+  },
+  {
+    type: "group" as const,
+    label: "Group Fitness Classes",
+    description: "Train with community for extra motivation",
+    icon: "👥",
+  },
+  {
+    type: "functional" as const,
+    label: "Functional Training",
+    description: "Build real-world strength and mobility",
+    icon: "🎯",
+  },
+];
 
 export default function PlansSection({
   onSelect,
@@ -8,140 +33,93 @@ export default function PlansSection({
   onSelect?: (plan: { name: string; priceId: string }) => void;
 }) {
   const [trainingType, setTrainingType] = useState<"personal" | "group" | "functional">("personal");
+  const router = useRouter();
 
-  const getPlans = () => {
-    switch (trainingType) {
-      case "personal":
-        return [
-          {
-            name: "Personal Training",
-            price: "40",
-            priceNote: "per session",
-            description: "One-on-one sessions tailored specifically to your goals and pace.",
-            features: [
-              "Custom workout plans",
-              "Progress tracking & analytics",
-              "Community access",
-              "Priority support",
-              "Monthly form check-ins",
-              "Direct messaging with trainer",
-            ],
-            priceId: "price_1Elite",
-            featured: true,
-          },
-        ];
-      case "group":
-        return [
-          {
-            name: "Individual Group",
-            price: "39.99",
-            priceNote: "per session",
-            description: "Join our vibrant community for group training.",
-            features: [
-              "Unlimited group classes",
-              "Community events",
-              "Group progress tracking",
-              "Expert instruction",
-            ],
-            priceId: "price_group_ind",
-            featured: true,
-          },
-          {
-            name: "Corporate Group",
-            price: "29.99",
-            priceNote: "per group session",
-            description: "Structured group training for organizations.",
-            features: [
-              "Dedicated class slots",
-              "Team building focus",
-              "Usage analytics",
-              "Custom onboarding",
-            ],
-            isOrganization: true,
-          },
-        ];
-      case "functional":
-        return [
-          {
-            name: "Functional Core",
-            price: "49.99",
-            priceNote: "per session",
-            description: "Master real-world movement and strength.",
-            features: [
-              "Mobility workshops",
-              "Strength & agility focus",
-              "Real-world application guides",
-              "Advanced equipment access",
-            ],
-            priceId: "price_functional_core",
-            featured: true,
-          },
-        ];
-      default:
-        return [];
+  const currentPlans = TRAINING_PLANS[trainingType] || [];
+
+  const handlePlanSelect = (plan: { name: string; priceId: string }) => {
+    if (onSelect) {
+      onSelect(plan);
+    } else {
+      // Programmatic navigation — no full page refresh
+      router.push(`/pricing?plan=${encodeURIComponent(plan.name)}&priceId=${encodeURIComponent(plan.priceId)}`);
     }
   };
 
-  const currentPlans = getPlans();
-
-  const trainingOptions = [
-    { type: "personal", label: "Personal", icon: "💪" },
-    { type: "group", label: "Group", icon: "👥" },
-    { type: "functional", label: "Functional", icon: "🎯" },
-  ];
-
   return (
     <section id="plans" className="mt-8 mb-12">
-      <div className="flex flex-col items-center justify-center mb-12">
-        <h2 className="text-4xl font-bold text-zinc-900 md:text-5xl">Select Your Training</h2>
-        <p className="mt-4 text-zinc-600 text-center max-w-2xl px-4">
-          Choose a category to view tailored plans. Billed per session (sessions are typically held 3 to 4 times a month).
+      {/* Header */}
+      <div className="flex flex-col items-center justify-center mb-12 text-center">
+        <p className="text-sm font-semibold uppercase tracking-widest text-rose-600 mb-2">
+          Training Options
         </p>
-
-        {/* Improved Training Type Selector Cards */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl px-4">
-          {trainingOptions.map((opt) => (
-            <div
-              key={opt.type}
-              role="button"
-              tabIndex={0}
-              onClick={() => setTrainingType(opt.type as any)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setTrainingType(opt.type as any);
-                }
-              }}
-              className={`flex flex-col items-center justify-center p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${trainingType === opt.type
-                ? "border-rose-600 bg-rose-50 shadow-md ring-1 ring-rose-600"
-                : "border-zinc-200 bg-white hover:border-rose-200 hover:bg-zinc-50"
-                }`}
-            >
-              <span className="text-3xl mb-3">{opt.icon}</span>
-              <span className={`font-bold capitalize ${trainingType === opt.type ? "text-rose-600" : "text-zinc-900"
-                }`}>
-                {opt.label}
-              </span>
-            </div>
-          ))}
-        </div>
+        <h2 className="text-4xl font-bold text-zinc-900 md:text-5xl">Choose Your Journey</h2>
+        <p className="mt-4 text-zinc-600 max-w-2xl px-4">
+          Select a training style to see available plans and pricing tailored for you.
+        </p>
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-8 rounded-3xl bg-zinc-50/50 border border-zinc-100 shadow-inner">
-        <div className="flex justify-center">
-          <div className={`grid gap-8 w-full place-items-center ${currentPlans.length === 1 ? "md:grid-cols-1 max-w-md" : "md:grid-cols-2 lg:grid-cols-2 max-w-4xl"
-            }`}>
+      {/* Dark card training type selector */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full max-w-5xl mx-auto px-4 mb-12">
+        {trainingOptions.map((opt, index) => {
+          const isActive = trainingType === opt.type;
+          return (
+            <motion.div
+              key={opt.type}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              whileHover={{ y: -6 }}
+              onClick={() => setTrainingType(opt.type)}
+              className={`cursor-pointer rounded-2xl p-7 flex flex-col justify-between border-2 transition-all duration-300 shadow-lg ${
+                isActive
+                  ? "bg-gradient-to-br from-rose-500 to-rose-700 border-rose-400 text-white scale-[1.03] z-10"
+                  : "bg-zinc-800 border-zinc-700 text-white hover:border-zinc-500 opacity-80 hover:opacity-100"
+              }`}
+            >
+              <div>
+                <div className="text-4xl mb-4">{opt.icon}</div>
+                <h3 className="text-xl font-bold leading-snug">{opt.label}</h3>
+                <p className="mt-2 text-sm opacity-85 leading-relaxed">{opt.description}</p>
+              </div>
+              <div className={`mt-6 inline-flex items-center text-sm font-bold ${isActive ? "text-white" : "text-rose-400"}`}>
+                {isActive ? "Selected" : "Select Training"}
+                <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Plan cards — full width container */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={trainingType}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.3 }}
+          className="w-full px-4"
+        >
+          <div className={`grid gap-8 w-full ${
+            currentPlans.length === 1
+              ? "grid-cols-1 max-w-lg mx-auto"
+              : "grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto"
+          }`}>
             {currentPlans.map((plan) => (
               <div key={plan.name} className="h-full w-full">
-                {/* @ts-ignore - PlanCard props mismatch with dynamic Elite props */}
-                <PlanCard {...plan} onSelect={onSelect ? (p) => onSelect(p) : undefined} />
+                {/* @ts-ignore */}
+                <PlanCard
+                  {...plan}
+                  onSelect={handlePlanSelect}
+                />
               </div>
             ))}
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </AnimatePresence>
     </section>
   );
 }
-
-
