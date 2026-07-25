@@ -156,7 +156,7 @@ export default function ContactSection() {
               <div className="text-center">
                 <div className="text-3xl mb-2">📍</div>
                 <p className="text-sm text-zinc-600">Location</p>
-                <p className="font-semibold text-zinc-900">Sugar Land, TX</p>
+                <p className="font-semibold text-zinc-900">SugarLand, TX</p>
               </div>
             </div>
           </div>
