@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(request: Request) {
   try {
     const requestBody = await request.json();
-    const { priceId, planName, uiMode } = requestBody;
+    const { priceId, planName, uiMode, userInfo } = requestBody;
 
     if (!priceId || !planName) {
       return NextResponse.json(
@@ -22,8 +22,16 @@ export async function POST(request: Request) {
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ["card"],
       mode: "subscription", // Changed to subscription for recurring
+      customer_email: userInfo?.email || undefined,
       metadata: {
         planName: planName,
+        fullName: userInfo?.fullName || "",
+        email: userInfo?.email || "",
+        phone: userInfo?.phone || "",
+        age: userInfo?.age || "",
+        address: userInfo?.address || "",
+        signature: userInfo?.signature || "",
+        signedDisclaimer: userInfo?.disclaimerAgreed ? "true" : "false",
       },
       line_items: [],
     };
@@ -43,19 +51,19 @@ export async function POST(request: Request) {
 
     if (isPlaceholder) {
       // Use inline price data for development without creating products in Stripe Dashboard
-      let unitAmount = 4000; // Default Personal Training
+      let unitAmount = 4000; // Default Personal Training ($40.00)
       let mode: Stripe.Checkout.SessionCreateParams.Mode = "payment";
-      let description = "Single training session. Typically scheduled 3-4 times a month.";
+      let description = "Monthly training subscription billed per month.";
 
       if (planName === "Individual Group") {
-        unitAmount = 3999;
-        description = "Individual group training session. Typically scheduled 3-4 times a month.";
+        unitAmount = 4000; // $40.00
+        description = "Individual group training subscription billed per month.";
       } else if (planName === "Functional Core") {
-        unitAmount = 4999;
-        description = "Functional core training session. Typically scheduled 3-4 times a month.";
+        unitAmount = 4900; // $49.00
+        description = "Functional core training subscription billed per month.";
       } else if (planName === "Personal Training") {
-        unitAmount = 4000;
-        description = "Personal training session. Typically scheduled 3-4 times a month.";
+        unitAmount = 4000; // $40.00
+        description = "Personal training subscription billed per month.";
       }
 
       sessionConfig.mode = mode;

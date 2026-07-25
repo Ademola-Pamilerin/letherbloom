@@ -14,7 +14,7 @@ export const TRAINING_PLANS: Record<"personal" | "group" | "functional", Plan[]>
     {
       name: "Personal Training",
       price: "40",
-      priceNote: "per session",
+      priceNote: "per month",
       description: "One-on-one sessions tailored specifically to your goals and pace.",
       features: [
         "Custom workout plans",
@@ -32,7 +32,7 @@ export const TRAINING_PLANS: Record<"personal" | "group" | "functional", Plan[]>
     {
       name: "Individual Group",
       price: "40",
-      priceNote: "per session",
+      priceNote: "per month",
       description: "Join our vibrant community for group training.",
       features: [
         "2-3 Sessions per week",
@@ -47,7 +47,7 @@ export const TRAINING_PLANS: Record<"personal" | "group" | "functional", Plan[]>
     {
       name: "Corporate Group",
       price: "29.99",
-      priceNote: "per group session",
+      priceNote: "per month",
       description: "Structured group training for organizations.",
       features: [
         "Dedicated class slots",
@@ -62,7 +62,7 @@ export const TRAINING_PLANS: Record<"personal" | "group" | "functional", Plan[]>
     {
       name: "Functional Core",
       price: "49",
-      priceNote: "per session",
+      priceNote: "per month",
       description: "Master real-world movement and strength.",
       features: [
         "Mobility workshops",

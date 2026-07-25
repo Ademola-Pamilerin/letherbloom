@@ -54,8 +54,8 @@ export default function PlansSection({
           Training Options
         </p>
         <h2 className="text-4xl font-bold text-zinc-900 md:text-5xl">Choose Your Journey</h2>
-        <p className="mt-4 text-zinc-600 max-w-2xl px-4">
-          Select a training style to see available plans and pricing tailored for you.
+        <p className="mt-4 text-zinc-600 text-center max-w-2xl px-4">
+          Choose a category to view tailored plans. Billed per month.
         </p>
       </div>
 

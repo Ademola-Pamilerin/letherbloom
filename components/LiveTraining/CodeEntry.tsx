@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface CodeEntryProps {
     onSuccess: (code: string, email?: string) => void;
@@ -14,6 +15,12 @@ export default function CodeEntry({ onSuccess, initialCode }: CodeEntryProps) {
     const [error, setError] = useState("");
     const [isOrganization, setIsOrganization] = useState(false);
     const [needsEmail, setNeedsEmail] = useState(false);
+
+    useEffect(() => {
+        if (initialCode) {
+            setCode(initialCode);
+        }
+    }, [initialCode]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -188,12 +195,12 @@ export default function CodeEntry({ onSuccess, initialCode }: CodeEntryProps) {
                     <div className="mt-8 text-center">
                         <p className="text-sm text-zinc-500">
                             Don't have a code?{" "}
-                            <a
+                            <Link
                                 href="/pricing"
                                 className="font-semibold text-rose-600 hover:text-rose-700 hover:underline"
                             >
                                 Get code
-                            </a>
+                            </Link>
                         </p>
                         <p className="mt-2 text-xs text-zinc-400">
                             Having trouble?{" "}

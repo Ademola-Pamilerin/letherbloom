@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 import Code from "@/util/code-gen";
+import { sendAccessCodeEmail } from "@/util/send-email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-12-18.acacia" as any,
@@ -134,14 +135,27 @@ export async function POST(req: Request) {
         const expiresAt = new Date();
         expiresAt.setMonth(expiresAt.getMonth() + expVal);
 
+        const fullName = session.metadata?.fullName || null;
+        const phone = session.metadata?.phone || null;
+        const age = session.metadata?.age || null;
+        const address = session.metadata?.address || null;
+        const signature = session.metadata?.signature || null;
+
+        const generatedCode = Code();
+
         const { error: dbError } = await supabase.from("access_codes").insert({
-          code: Code(),
+          code: generatedCode,
           is_active: true,
           assigned_to: email,
           expires_at: expiresAt.toISOString(),
           checkout_session_id: session.id,
           plan: planName,
           is_organization: false,
+          full_name: fullName,
+          phone: phone,
+          age: age,
+          address: address,
+          signature: signature,
         });
 
         if (dbError) {
@@ -150,6 +164,16 @@ export async function POST(req: Request) {
             { error: "Database error" },
             { status: 500 }
           );
+        }
+
+        // Send confirmation email containing access code
+        if (email) {
+          await sendAccessCodeEmail({
+            email,
+            code: generatedCode,
+            planName,
+            fullName: fullName || undefined,
+          });
         }
       }
     }
