@@ -145,18 +145,18 @@ export default function ContactSection() {
                 <div className="text-3xl mb-2">📧</div>
                 <p className="text-sm text-zinc-600">Email</p>
                 <p className="font-semibold text-zinc-900">
-                  hello@lhbloom.org
+                  admin@lhbloom.org
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-3xl mb-2">📱</div>
                 <p className="text-sm text-zinc-600">Phone</p>
-                <p className="font-semibold text-zinc-900">+1 (555) 123-4567</p>
+                <p className="font-semibold text-zinc-900">+1 (832) 671-2968</p>
               </div>
               <div className="text-center">
                 <div className="text-3xl mb-2">📍</div>
                 <p className="text-sm text-zinc-600">Location</p>
-                <p className="font-semibold text-zinc-900">San Francisco, CA</p>
+                <p className="font-semibold text-zinc-900">Sugar Land, TX</p>
               </div>
             </div>
           </div>
