@@ -68,7 +68,6 @@ export const TRAINING_PLANS: Record<"personal" | "group" | "functional", Plan[]>
         "Mobility workshops",
         "Strength & agility focus",
         "Real-world application guides",
-        "Advanced equipment access",
       ],
       priceId: "price_functional_core",
       featured: true,
