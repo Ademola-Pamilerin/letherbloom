@@ -144,24 +144,24 @@ export default function Footer() {
                 <li>
                   <p className="text-sm text-zinc-400">Email</p>
                   <Link
-                    href="mailto:hello@lhbloom.org"
+                    href="mailto:admin@lhbloom.org"
                     className="text-white transition hover:text-rose-500"
                   >
-                    hello@lhbloom.org
+                    admin@lhbloom.org
                   </Link>
                 </li>
                 <li>
                   <p className="text-sm text-zinc-400">Phone</p>
                   <Link
-                    href="tel:+15551234567"
+                    href="tel:+18326712968"
                     className="text-white transition hover:text-rose-500"
                   >
-                    +1 (555) 123-4567
+                    (832) 671-2968
                   </Link>
                 </li>
                 <li>
                   <p className="text-sm text-zinc-400">Location</p>
-                  <p className="text-white">San Francisco, CA</p>
+                  <p className="text-white">Sugarland, TX</p>
                 </li>
               </ul>
             </div>
