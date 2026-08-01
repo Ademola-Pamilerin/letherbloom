@@ -12,7 +12,7 @@ export default function OrganizationPricingForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const pricePerSeat = 10;
+    const pricePerSeat = 29.99;
     const totalSeats = memberEmails.filter((e) => e.trim()).length;
     const totalCost = pricePerSeat * totalSeats * durationMonths;
 

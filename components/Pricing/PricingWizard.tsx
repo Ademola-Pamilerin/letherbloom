@@ -9,10 +9,18 @@ import { findPlanByName } from "./plansData";
 export default function PricingWizard() {
     const [step, setStep] = useState<1 | 2>(1);
     const [selectedPlan, setSelectedPlan] = useState<{ name: string; priceId: string } | null>(null);
+    const [renewCode, setRenewCode] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const planName = params.get("plan");
+        const codeParam = params.get("code");
+        const isRenew = params.get("renew") === "true";
+
+        if (codeParam && isRenew) {
+            setRenewCode(codeParam);
+        }
+
         if (planName) {
             const plan = findPlanByName(planName);
             if (plan) {
@@ -60,7 +68,7 @@ export default function PricingWizard() {
                         transition={{ duration: 0.3 }}
                     >
                         {selectedPlan && (
-                            <PaymentStep plan={selectedPlan} onBack={handleBack} />
+                            <PaymentStep plan={selectedPlan} onBack={handleBack} renewCode={renewCode} />
                         )}
                     </motion.div>
                 )}

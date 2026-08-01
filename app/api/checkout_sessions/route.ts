@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(request: Request) {
   try {
     const requestBody = await request.json();
-    const { priceId, planName, uiMode, userInfo } = requestBody;
+    const { priceId, planName, uiMode, userInfo, renewCode } = requestBody;
 
     if (!priceId || !planName) {
       return NextResponse.json(
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
         address: userInfo?.address || "",
         signature: userInfo?.signature || "",
         signedDisclaimer: userInfo?.disclaimerAgreed ? "true" : "false",
+        renewCode: renewCode || "",
       },
       line_items: [],
     };

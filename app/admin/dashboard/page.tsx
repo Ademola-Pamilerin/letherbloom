@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useSearchParams, useRouter } from "next/navigation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { Eye, EyeOff } from "lucide-react";
 
 
 function AdminDashboardContent() {
@@ -16,6 +17,7 @@ function AdminDashboardContent() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
     const [loginError, setLoginError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     // Detailed loading states
     const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -23,6 +25,8 @@ function AdminDashboardContent() {
     const [isRemovingMember, setIsRemovingMember] = useState(false);
     const [isPurchasing, setIsPurchasing] = useState(false);
     const [isCheckingSession, setIsCheckingSession] = useState(true);
+    const [isFulfilling, setIsFulfilling] = useState(!!sessionId);
+    const [isRenewing, setIsRenewing] = useState(false);
 
     const [admin, setAdmin] = useState<any>(null);
     const [members, setMembers] = useState<any[]>([]);
@@ -112,16 +116,33 @@ function AdminDashboardContent() {
         initSession();
     }, []);
 
-    // Handle payment return
+    // Handle payment return & org creation fulfillment
     useEffect(() => {
-        if (sessionId && isLoggedIn && admin) { // Ensure we are logged in before handling success fully
-            setMessage("Payment successful! Seats have been updated.");
-            // Refresh data to show new seats
-            loadMembers(admin.organizationId, admin.email);
-            // Clean URL
-            router.replace("/admin/dashboard");
+        if (sessionId && !isLoggedIn) {
+            setIsFulfilling(true);
+            fetch(`/api/get-code?session_id=${sessionId}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.isOrganization) {
+                        toast.success(`Organization account created/renewed! Login credentials and access code have been sent to ${data.email}.`);
+                    }
+                })
+                .catch((err) => console.error("Error fulfilling org session:", err))
+                .finally(() => {
+                    setIsFulfilling(false);
+                    // Remove session_id from URL so it doesn't trigger again on refresh
+                    router.replace("/admin/dashboard");
+                });
+        } else if (sessionId && isLoggedIn && admin) {
+            // Wait for admin to be loaded if they are already logged in
+            setIsFulfilling(true);
+            setMessage("Payment successful! Organization has been updated.");
+            loadMembers(admin.organizationId, admin.email).finally(() => {
+                setIsFulfilling(false);
+                router.replace("/admin/dashboard");
+            });
         }
-    }, [sessionId, isLoggedIn, admin]); // Depend on admin being loaded
+    }, [sessionId, isLoggedIn, admin, router]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -299,13 +320,49 @@ function AdminDashboardContent() {
         }
     };
 
+    const handleRenewOrganization = async () => {
+        setIsRenewing(true);
+        setMessage("");
+
+        try {
+            // Need to pass the organization details to a checkout endpoint for renewal.
+            // Using the organization checkout route but we'll pass renew flag.
+            const res = await fetch("/api/checkout_sessions/organization", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    organizationName: admin.organization.name,
+                    adminEmail: admin.organization.admin_email,
+                    memberEmails: members.map(m => m.email), // Include existing members to maintain count
+                    durationMonths: 1, // Default to 1 month for renewal
+                    isRenewal: true,
+                    organizationId: admin.organization.id,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || "Failed to initiate renewal");
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                setMessage("Error: No checkout URL returned");
+            }
+        } catch (err: any) {
+            setMessage("Error: " + err.message);
+        } finally {
+            setIsRenewing(false);
+        }
+    };
+
     // Initial Loading State to prevent flash
-    if (isCheckingSession) {
+    if (isCheckingSession || isFulfilling) {
         return (
             <div className="bg-white min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <div className="h-8 w-8 animate-spin rounded-full border-2 border-rose-600 border-t-transparent mx-auto mb-4" />
-                    <p className="text-zinc-500">Loading dashboard...</p>
+                    <p className="text-zinc-500">{isFulfilling ? "Finalizing payment and setting up your account..." : "Loading dashboard..."}</p>
                 </div>
             </div>
         );
@@ -339,13 +396,22 @@ function AdminDashboardContent() {
                             </div>
                             <div>
                                 <label htmlFor="password" className="block text-sm font-semibold text-zinc-700 mb-2">Password</label>
-                                <input
-                                    type="password"
-                                    required
-                                    value={loginPassword}
-                                    onChange={(e) => setLoginPassword(e.target.value)}
-                                    className="w-full rounded-lg border border-zinc-200 px-4 py-3 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
-                                />
+                                <div className="relative">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        required
+                                        value={loginPassword}
+                                        onChange={(e) => setLoginPassword(e.target.value)}
+                                        className="w-full rounded-lg border border-zinc-200 px-4 py-3 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 focus:outline-none"
+                                    >
+                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
+                                </div>
                             </div>
                             {loginError && <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600">{loginError}</div>}
                             <button
@@ -413,20 +479,29 @@ function AdminDashboardContent() {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl border border-zinc-200 p-6">
-                        <h3 className="text-sm font-semibold text-zinc-500 mb-2">
-                            Subscription Status
-                        </h3>
-                        <div className="flex items-baseline gap-2">
-                            <p className="text-2xl font-bold text-green-600">
-                                {admin.organization.is_active ? "Active" : "Inactive"}
-                            </p>
-                            {admin.organization.is_active && (
-                                <span className="text-sm text-zinc-500">
-                                    • {Math.max(0, Math.ceil((new Date(admin.organization.subscription_end).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} days left
-                                </span>
-                            )}
+                    <div className="bg-white rounded-xl border border-zinc-200 p-6 flex flex-col justify-between">
+                        <div>
+                            <h3 className="text-sm font-semibold text-zinc-500 mb-2">
+                                Subscription Status
+                            </h3>
+                            <div className="flex items-baseline gap-2">
+                                <p className={`text-2xl font-bold ${admin.organization.is_active ? 'text-green-600' : 'text-rose-600'}`}>
+                                    {admin.organization.is_active ? "Active" : "Expired"}
+                                </p>
+                                {admin.organization.is_active && (
+                                    <span className="text-sm text-zinc-500">
+                                        • {Math.max(0, Math.ceil((new Date(admin.organization.subscription_end).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} days left
+                                    </span>
+                                )}
+                            </div>
                         </div>
+                        <button
+                            onClick={handleRenewOrganization}
+                            disabled={isRenewing}
+                            className="mt-4 w-full rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700 transition disabled:opacity-50"
+                        >
+                            {isRenewing ? "Processing..." : "Renew Subscription"}
+                        </button>
                     </div>
                 </div>
 

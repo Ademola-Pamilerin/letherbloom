@@ -15,6 +15,9 @@ export default function CodeEntry({ onSuccess, initialCode }: CodeEntryProps) {
     const [error, setError] = useState("");
     const [isOrganization, setIsOrganization] = useState(false);
     const [needsEmail, setNeedsEmail] = useState(false);
+    const [isExpired, setIsExpired] = useState(false);
+    const [expiredPlan, setExpiredPlan] = useState("");
+    const [expiredCode, setExpiredCode] = useState("");
 
     useEffect(() => {
         if (initialCode) {
@@ -26,6 +29,7 @@ export default function CodeEntry({ onSuccess, initialCode }: CodeEntryProps) {
         e.preventDefault();
         setIsLoading(true);
         setError("");
+        setIsExpired(false);
 
         try {
             const res = await fetch("/api/validate-code", {
@@ -37,6 +41,16 @@ export default function CodeEntry({ onSuccess, initialCode }: CodeEntryProps) {
             const data = await res.json();
 
             if (!res.ok) {
+                // Check if code is expired
+                if (data.isExpired) {
+                    setIsExpired(true);
+                    setExpiredPlan(data.plan || "");
+                    setExpiredCode(data.code || code);
+                    setError(data.error);
+                    setIsLoading(false);
+                    return;
+                }
+
                 // Check if this is an organization code that needs email
                 if (data.isOrganization && !email) {
                     setIsOrganization(true);
@@ -140,7 +154,7 @@ export default function CodeEntry({ onSuccess, initialCode }: CodeEntryProps) {
                             </div>
                         )}
 
-                        {error && (
+                        {error && !isExpired && (
                             <div className="rounded-xl bg-red-50 p-4 flex items-start gap-3 text-sm text-red-600 animate-in slide-in-from-top-2 fade-in duration-200">
                                 <svg
                                     className="h-5 w-5 shrink-0 text-red-500 mt-0.5"
@@ -156,6 +170,47 @@ export default function CodeEntry({ onSuccess, initialCode }: CodeEntryProps) {
                                     />
                                 </svg>
                                 <span className="font-medium">{error}</span>
+                            </div>
+                        )}
+
+                        {isExpired && (
+                            <div className="rounded-2xl bg-amber-50 border border-amber-200 p-5 space-y-3 animate-in slide-in-from-top-2 fade-in duration-300">
+                                <div className="flex items-start gap-3 text-amber-800">
+                                    <svg
+                                        className="h-6 w-6 text-amber-600 shrink-0 mt-0.5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        />
+                                    </svg>
+                                    <div>
+                                        <h4 className="font-bold text-amber-900">Code Expired</h4>
+                                        <p className="text-xs text-amber-700 mt-0.5">
+                                            Your code <code className="bg-amber-100 px-1.5 py-0.5 rounded font-mono font-bold">{expiredCode}</code> for {expiredPlan || "your plan"} has expired. Choose an option below to continue training:
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row gap-2 pt-2">
+                                    <Link
+                                        href={`/pricing?renew=true&code=${encodeURIComponent(expiredCode)}${expiredPlan ? `&plan=${encodeURIComponent(expiredPlan)}` : ""}`}
+                                        className="flex-1 text-center bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition shadow-sm"
+                                    >
+                                        🔄 Renew This Code
+                                    </Link>
+                                    <Link
+                                        href="/pricing"
+                                        className="flex-1 text-center bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 font-semibold py-2.5 px-4 rounded-xl text-sm transition"
+                                    >
+                                        ⭐ Upgrade / Change Plan
+                                    </Link>
+                                </div>
                             </div>
                         )}
 

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 import Code from "@/util/code-gen";
-import { sendAccessCodeEmail } from "@/util/send-email";
+import { sendAccessCodeEmail, sendOrgAdminEmail } from "@/util/send-email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-12-18.acacia" as any,
@@ -71,9 +71,18 @@ export async function POST(req: Request) {
           );
         }
 
-        console.log("Organization created successfully:", createOrgData);
+        console.log("Organization created successfully:", createOrgData.organization?.name);
 
-        // TODO: Send welcome email to admin with credentials
+        // Send welcome email to admin with credentials
+        if (createOrgData.organization) {
+          const { adminEmail: orgAdminEmail, adminPassword, code: orgCode, name: orgName } = createOrgData.organization;
+          await sendOrgAdminEmail({
+            adminEmail: orgAdminEmail,
+            adminPassword,
+            orgName,
+            orgCode,
+          });
+        }
       } else if (session.metadata?.type === "additional_seats") {
         // Handle additional seat purchase
         const organizationId = session.metadata.organizationId;
@@ -141,38 +150,79 @@ export async function POST(req: Request) {
         const address = session.metadata?.address || null;
         const signature = session.metadata?.signature || null;
 
-        const generatedCode = Code();
+        // Renewal check: look for an existing code for same email + plan (active or expired)
+        const { data: existingUserCode } = await supabase
+          .from("access_codes")
+          .select("id, code, expires_at")
+          .eq("assigned_to", email)
+          .eq("plan", planName)
+          .eq("is_organization", false)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
 
-        const { error: dbError } = await supabase.from("access_codes").insert({
-          code: generatedCode,
-          is_active: true,
-          assigned_to: email,
-          expires_at: expiresAt.toISOString(),
-          checkout_session_id: session.id,
-          plan: planName,
-          is_organization: false,
-          full_name: fullName,
-          phone: phone,
-          age: age,
-          address: address,
-          signature: signature,
-        });
+        let finalCode: string;
+        let isRenewal = false;
 
-        if (dbError) {
-          console.error("Failed to save code:", dbError);
-          return NextResponse.json(
-            { error: "Database error" },
-            { status: 500 }
-          );
+        if (existingUserCode) {
+          // Renew: extend the existing code's expiry from today
+          isRenewal = true;
+          finalCode = existingUserCode.code;
+
+          const newExpiry = new Date();
+          newExpiry.setMonth(newExpiry.getMonth() + expVal);
+
+          const { error: renewError } = await supabase
+            .from("access_codes")
+            .update({
+              is_active: true,
+              expires_at: newExpiry.toISOString(),
+              checkout_session_id: session.id,
+            })
+            .eq("id", existingUserCode.id);
+
+          if (renewError) {
+            console.error("Failed to renew code:", renewError);
+            return NextResponse.json({ error: "Database error" }, { status: 500 });
+          }
+
+          console.log(`Renewed code ${finalCode} for ${email} — new expiry: ${newExpiry.toISOString()}`);
+        } else {
+          // New subscriber: generate and insert a fresh code
+          finalCode = Code();
+
+          const { error: dbError } = await supabase.from("access_codes").insert({
+            code: finalCode,
+            is_active: true,
+            assigned_to: email,
+            expires_at: expiresAt.toISOString(),
+            checkout_session_id: session.id,
+            plan: planName,
+            is_organization: false,
+            full_name: fullName,
+            phone: phone,
+            age: age,
+            address: address,
+            signature: signature,
+          });
+
+          if (dbError) {
+            console.error("Failed to save code:", dbError);
+            return NextResponse.json(
+              { error: "Database error" },
+              { status: 500 }
+            );
+          }
         }
 
-        // Send confirmation email containing access code
+        // Send confirmation/renewal email
         if (email) {
           await sendAccessCodeEmail({
             email,
-            code: generatedCode,
+            code: finalCode,
             planName,
             fullName: fullName || undefined,
+            isRenewal,
           });
         }
       }

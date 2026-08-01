@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { generateOrgCode } from "@/util/org-code-gen";
 import { hashPassword } from "@/util/password-hash";
+import { sendOrgAdminEmail } from "@/util/send-email";
+import crypto from "crypto";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -66,7 +68,7 @@ export async function POST(request: Request) {
                 name: organizationName,
                 code: orgCode,
                 admin_email: adminEmail,
-                price_per_seat: 10.0,
+                price_per_seat: 29.99,
                 max_seats: memberEmails.length, // Set max seats to initial paid count
                 subscription_duration_months: durationMonths,
                 subscription_start: subscriptionStart.toISOString(),
@@ -86,9 +88,8 @@ export async function POST(request: Request) {
             );
         }
 
-        // Generate admin password (using email address + "123")
-        const adminPassword = `${adminEmail.toLowerCase().trim()}123`;
-        console.log(adminPassword);
+        // Generate a cryptographically random admin password
+        const adminPassword = crypto.randomBytes(12).toString("base64url").slice(0, 16);
         const passwordHash = await hashPassword(adminPassword);
 
         // Create admin user
@@ -140,6 +141,14 @@ export async function POST(request: Request) {
         if (codeError) {
             console.error("Failed to create access code:", codeError);
         }
+
+        // Send admin welcome email with credentials & access code
+        await sendOrgAdminEmail({
+            adminEmail,
+            adminPassword,
+            orgName: organizationName,
+            orgCode,
+        });
 
         return NextResponse.json({
             success: true,

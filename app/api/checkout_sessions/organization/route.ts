@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: Request) {
     try {
-        const { organizationName, adminEmail, memberEmails, durationMonths } =
+        const { organizationName, adminEmail, memberEmails, durationMonths, isRenewal, organizationId } =
             await request.json();
 
         // Validation
@@ -25,8 +25,8 @@ export async function POST(request: Request) {
             );
         }
 
-        // Calculate total cost: $10 per seat * duration in months
-        const pricePerSeat = 10.0;
+        // Calculate total cost: $29.99 per seat * duration in months
+        const pricePerSeat = 29.99;
         const totalSeats = memberEmails.length;
         const totalAmount = Math.round(pricePerSeat * totalSeats * durationMonths * 100); // Convert to cents
 
@@ -44,6 +44,8 @@ export async function POST(request: Request) {
                 memberEmails: JSON.stringify(memberEmails),
                 durationMonths: durationMonths.toString(),
                 totalSeats: totalSeats.toString(),
+                isRenewal: isRenewal ? "true" : "false",
+                organizationId: organizationId || "",
             },
             line_items: [
                 {

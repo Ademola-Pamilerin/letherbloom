@@ -26,16 +26,46 @@ export async function POST(request: Request) {
         console.log(error);
 
         if (error || !accessCode) {
+            // Check if it's an expired/inactive code
+            const { data: expiredCode } = await supabase
+                .from("access_codes")
+                .select("code, plan, expires_at, is_active")
+                .eq("code", code)
+                .maybeSingle();
+
+            if (expiredCode) {
+                const isExpired = expiredCode.expires_at && expiredCode.expires_at <= new Date().toISOString();
+                if (isExpired || !expiredCode.is_active) {
+                    return NextResponse.json(
+                        {
+                            error: "Your access code has expired. You can renew it to continue your training.",
+                            isExpired: true,
+                            plan: expiredCode.plan,
+                            code: expiredCode.code,
+                        },
+                        { status: 401 }
+                    );
+                }
+            }
+
             return NextResponse.json(
                 { error: "Invalid or inactive code" },
                 { status: 401 }
             );
         }
 
-        // Check expiration
+        // Check expiration (for active codes that have passed their date)
         const now = new Date().toISOString();
         if (accessCode.expires_at && accessCode.expires_at <= now) {
-            return NextResponse.json({ error: "Code expired" }, { status: 401 });
+            return NextResponse.json(
+                {
+                    error: "Your access code has expired. You can renew it to continue your training.",
+                    isExpired: true,
+                    plan: accessCode.plan,
+                    code: accessCode.code,
+                },
+                { status: 401 }
+            );
         }
 
         // Check if this is an organization code

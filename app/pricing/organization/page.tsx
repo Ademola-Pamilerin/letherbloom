@@ -76,10 +76,10 @@ export default function OrganizationPricingPage() {
       {
         "@type": "Offer",
         "priceCurrency": "USD",
-        "price": "10",
+        "price": "29.99",
         "priceSpecification": {
           "@type": "UnitPriceSpecification",
-          "price": "10",
+          "price": "29.99",
           "priceCurrency": "USD",
           "unitText": "seat/month"
         },

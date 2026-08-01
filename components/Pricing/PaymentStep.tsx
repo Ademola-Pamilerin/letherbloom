@@ -12,9 +12,10 @@ import { findPlanByName } from "./plansData";
 interface PaymentStepProps {
   plan: { name: string; priceId: string; duration?: number };
   onBack: () => void;
+  renewCode?: string;
 }
 
-export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
+export default function PaymentStep({ plan, onBack, renewCode }: PaymentStepProps) {
   const [checkoutInitiated, setCheckoutInitiated] = useState(false);
   const [clientSecret, setClientSecret] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -63,6 +64,7 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
         duration: plan.duration,
         uiMode: "embedded",
         userInfo: formData,
+        renewCode: renewCode || undefined,
       }),
     })
       .then((res) => res.json())
@@ -222,6 +224,16 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
           {/* Right Column: User Information & Health Disclaimer Form */}
           <div className="md:w-7/12 p-5 sm:p-8">
             <form onSubmit={handleProceedToPayment} className="space-y-6">
+              {renewCode && (
+                <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 p-3 flex items-center gap-2.5 text-xs text-amber-800 font-medium">
+                  <span className="text-base">🔄</span>
+                  <div>
+                    <span className="font-bold text-amber-900 block">Code Renewal Mode</span>
+                    Your payment will extend your access code: <code className="font-bold font-mono bg-amber-100 px-1 rounded">{renewCode}</code>
+                  </div>
+                </div>
+              )}
+
               <div>
                 <h3 className="text-2xl font-bold text-zinc-950">
                   Registration & Health Disclaimer

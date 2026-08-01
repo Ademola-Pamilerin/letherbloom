@@ -67,7 +67,7 @@ export async function POST(request: Request) {
         );
 
         // Calculate cost for additional seats
-        const pricePerSeat = organization.price_per_seat || 10.0;
+        const pricePerSeat = organization.price_per_seat || 29.99;
         const totalCost = Math.round(
             pricePerSeat * additionalSeats * remainingMonths * 100
         ); // Convert to cents
