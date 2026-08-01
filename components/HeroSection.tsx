@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 export default function HeroSection() {
   return (
     <section className="relative min-h-screen bg-gradient-to-b from-rose-50 to-white py-12">
-      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-6 lg:px-12 xl:px-16">
+      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-4">
         <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
           <div className="grid gap-12 md:grid-cols-2 md:items-center w-full lg:gap-16">
             <motion.div
@@ -78,3 +78,4 @@ export default function HeroSection() {
     </section>
   );
 }
+

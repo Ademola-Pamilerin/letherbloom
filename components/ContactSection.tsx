@@ -26,7 +26,7 @@ export default function ContactSection() {
 
   return (
     <section id="contacts" className="bg-white py-12">
-      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-6 lg:px-12 xl:px-16">
+      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -165,3 +165,4 @@ export default function ContactSection() {
     </section>
   );
 }
+

@@ -92,7 +92,7 @@ export default function AboutPage() {
 
             {/* Hero for About Page */}
             <section className="relative bg-rose-900 py-24 text-white">
-                <div className="mx-auto max-w-7xl px-6 lg:px-12 xl:px-16 relative z-10">
+                <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-4 relative z-10">
                     <div className="max-w-3xl">
                         <h1 className="text-5xl font-black leading-tight md:text-7xl">
                             About <span className="text-rose-400">LetHerBloom</span>

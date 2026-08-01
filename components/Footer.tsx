@@ -33,7 +33,7 @@ export default function Footer() {
   return (
     <footer className="bg-zinc-900 text-white">
       {/* Main Footer Content */}
-      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-6 py-20 lg:px-12 xl:px-16">
+      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-4 py-20">
         <div className="grid gap-12 md:grid-cols-4">
           {/* Brand Section */}
           <motion.div
@@ -200,3 +200,4 @@ export default function Footer() {
     </footer>
   );
 }
+

@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function OurVisionSection() {
     return (
         <section className="bg-rose-50 py-20 text-zinc-900 overflow-hidden">
-            <div className="mx-auto max-w-7xl px-6 lg:px-12 xl:px-16">
+            <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-4">
                 <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
 
                     <motion.div
@@ -60,3 +60,4 @@ export default function OurVisionSection() {
         </section>
     );
 }
+

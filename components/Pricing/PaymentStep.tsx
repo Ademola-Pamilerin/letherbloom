@@ -51,6 +51,7 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
 
     setLoading(true);
     setError("");
+    setClientSecret("");
 
     // Create a Checkout Session
     fetch("/api/checkout_sessions", {
@@ -110,6 +111,7 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
     }
     setFormError("");
     setCheckoutInitiated(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const isSignatureValid =
@@ -443,9 +445,9 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-100">
+      <div className="flex flex-col items-center justify-center min-h-[50vh] w-full max-w-4xl mx-auto px-4">
         <ThreeDotsLoader color="bg-rose-600" />
-        <p className="mt-4 text-zinc-500 animate-pulse">
+        <p className="mt-6 text-zinc-500 animate-pulse text-sm sm:text-base text-center">
           Initializing Secure Checkout...
         </p>
       </div>
@@ -454,7 +456,7 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
 
   if (error) {
     return (
-      <div className="text-center p-8 bg-red-50 rounded-lg max-w-xl mx-auto">
+      <div className="text-center p-8 bg-red-50 rounded-lg max-w-xl mx-auto w-[95%]">
         <p className="text-red-600 font-semibold mb-4">
           Error loading checkout: {error}
         </p>
@@ -462,6 +464,7 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
           onClick={() => {
             setCheckoutInitiated(false);
             setError("");
+            setClientSecret("");
           }}
           className="text-rose-600 hover:underline font-semibold"
         >
@@ -472,9 +475,12 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto px-2 sm:px-4">
       <button
-        onClick={() => setCheckoutInitiated(false)}
+        onClick={() => {
+          setCheckoutInitiated(false);
+          setClientSecret("");
+        }}
         className="mb-6 flex items-center text-sm font-medium text-zinc-500 hover:text-rose-600 transition-colors"
       >
         <svg
@@ -494,21 +500,21 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
       </button>
 
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-zinc-100">
-        <div className="bg-zinc-50 px-8 py-6 border-b border-zinc-200 flex justify-between items-center">
+        <div className="bg-zinc-50 px-4 sm:px-8 py-4 sm:py-6 border-b border-zinc-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
           <div>
             <h3 className="text-xl font-bold text-zinc-900">Checkout</h3>
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-zinc-500 mt-1">
               Completing purchase for{" "}
               <span className="font-semibold text-rose-600">{plan.name}</span>{" "}
               ({formData.fullName})
             </p>
           </div>
-          <div className="text-xs font-mono bg-zinc-200 px-2 py-1 rounded text-zinc-600">
+          <div className="text-xs font-mono bg-zinc-200 px-2 py-1 rounded text-zinc-600 self-start sm:self-auto mt-2 sm:mt-0">
             Secure SSL
           </div>
         </div>
 
-        <div className="p-1">
+        <div className="p-0 sm:p-1">
           {clientSecret && (
             <EmbeddedCheckoutProvider
               stripe={getStripePromise()}

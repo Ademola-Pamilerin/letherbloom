@@ -71,7 +71,7 @@ export default function TestimonialsSection() {
 
   return (
     <section id="testimonials" className="bg-gradient-to-b from-rose-50 to-white py-12">
-      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-6 lg:px-12 xl:px-16">
+      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -107,3 +107,4 @@ export default function TestimonialsSection() {
     </section>
   );
 }
+

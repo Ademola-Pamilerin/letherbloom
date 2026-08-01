@@ -19,7 +19,7 @@ const images = [
 export default function GallerySection() {
     return (
         <section className="bg-rose-50 py-20">
-            <div className="mx-auto max-w-7xl px-6 lg:px-12 xl:px-16">
+            <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl px-2 sm:px-4">
                 <div className="mb-12 text-center">
                     <h2 className="text-3xl font-bold text-zinc-900 md:text-5xl">
                         Community <span className="text-rose-600">Moments</span>
@@ -56,3 +56,4 @@ export default function GallerySection() {
         </section>
     );
 }
+

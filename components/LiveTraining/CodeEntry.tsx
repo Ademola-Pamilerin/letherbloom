@@ -59,7 +59,7 @@ export default function CodeEntry({ onSuccess, initialCode }: CodeEntryProps) {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center p-4">
+        <div className="flex flex-col items-center justify-center">
             <div className="w-full max-w-lg overflow-hidden rounded-3xl bg-white shadow-2xl border border-rose-100 animate-in fade-in zoom-in duration-500">
                 <div className="bg-gradient-to-r from-rose-500 to-rose-600 px-8 py-10 text-center text-white">
                     <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">

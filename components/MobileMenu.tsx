@@ -89,17 +89,17 @@ export default function MobileMenu() {
                 </button>
 
                 {/* Top: Logo & Name */}
-                <div className="mt-4 flex flex-col items-center">
+                <div className="mt-8 flex flex-col items-center">
                   <div className="flex items-center justify-center">
                     <Image
                       src="/logo/logo-full-transparent.png"
                       alt="LetHerBloom Logo"
                       width={1080}
                       height={1080}
-                      className="h-14 w-auto object-contain rounded-full"
+                      className="h-28 w-auto object-contain"
                     />
                   </div>
-                  <span className="mt-2 text-xl font-bold text-rose-700">LetHerBloom</span>
+                  <span className="mt-4 text-3xl font-black text-rose-700">LetHerBloom</span>
                 </div>
 
                 {/* Center: Navigation Items */}
@@ -141,7 +141,7 @@ export default function MobileMenu() {
         onClick={() => setIsOpen(!isOpen)}
       >
         <svg
-          className="h-6 w-6 text-zinc-900"
+          className="h-8 w-8 text-zinc-900"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
