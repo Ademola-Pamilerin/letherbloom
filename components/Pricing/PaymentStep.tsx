@@ -128,7 +128,7 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
 
   if (!checkoutInitiated) {
     return (
-      <div className="w-full max-w-5xl mx-auto px-4 py-4">
+      <div className="w-full max-w-5xl mx-auto px-1 sm:px-4 py-4">
         <button
           onClick={onBack}
           className="mb-6 flex items-center text-sm font-medium text-zinc-500 hover:text-rose-600 transition-colors"
@@ -151,7 +151,7 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
 
         <div className="bg-white rounded-2xl border border-zinc-200 shadow-xl overflow-hidden md:flex">
           {/* Left Column: Plan Information */}
-          <div className="md:w-5/12 bg-zinc-50 p-8 border-b md:border-b-0 md:border-r border-zinc-200 flex flex-col justify-between">
+          <div className="md:w-5/12 bg-zinc-50 p-5 sm:p-8 border-b md:border-b-0 md:border-r border-zinc-200 flex flex-col justify-between">
             <div>
               <span className="inline-flex items-center rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-600 border border-rose-100 uppercase tracking-wider mb-4">
                 Selected Plan
@@ -218,7 +218,7 @@ export default function PaymentStep({ plan, onBack }: PaymentStepProps) {
           </div>
 
           {/* Right Column: User Information & Health Disclaimer Form */}
-          <div className="md:w-7/12 p-8">
+          <div className="md:w-7/12 p-5 sm:p-8">
             <form onSubmit={handleProceedToPayment} className="space-y-6">
               <div>
                 <h3 className="text-2xl font-bold text-zinc-950">

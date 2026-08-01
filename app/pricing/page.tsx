@@ -86,7 +86,7 @@ export default function PricingPage() {
       />
       <Navigation />
 
-      <main className="flex-grow container mx-auto px-6 my-10">
+      <main className="flex-grow w-[95%] sm:w-[98%] max-w-7xl mx-auto py-6 md:py-10">
         <PricingPageView />
       </main>
 

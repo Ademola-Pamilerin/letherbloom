@@ -60,7 +60,7 @@ export default function PlansSection({
       </div>
 
       {/* Dark card training type selector */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full max-w-5xl mx-auto px-4 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full max-w-5xl mx-auto px-2 sm:px-4 mb-12">
         {trainingOptions.map((opt, index) => {
           const isActive = trainingType === opt.type;
           return (
@@ -101,7 +101,7 @@ export default function PlansSection({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -12 }}
           transition={{ duration: 0.3 }}
-          className="w-full px-4"
+          className="w-full px-2 sm:px-4"
         >
           <div className={`grid gap-8 w-full ${
             currentPlans.length === 1

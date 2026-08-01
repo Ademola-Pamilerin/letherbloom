@@ -5,9 +5,9 @@ import PricingWizard from "@/components/Pricing/PricingWizard";
 export default function PricingPageView() {
     return (
 
-        <main className="grow container mx-auto px-6">
+        <div className="w-full">
             <PricingWizard />
-        </main>
+        </div>
 
 
 

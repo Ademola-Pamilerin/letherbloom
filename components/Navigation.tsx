@@ -10,7 +10,7 @@ export default function Navigation() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-rose-100 bg-white/95 backdrop-blur">
-      <div className="mx-auto 2xl:max-w-8xl xl:max-w-7xl lg:max-w-6xl max-w-5xl px-6 py-4 ">
+      <div className="mx-auto w-[95%] sm:w-[98%] max-w-7xl py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="flex items-center justify-center">
