@@ -188,7 +188,7 @@ export default function PaymentStep({ plan, onBack, renewCode }: PaymentStepProp
 
               <div className="bg-white rounded-xl border border-zinc-200 p-5 space-y-3">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-zinc-500">Amount per month:</span>
+                  <span className="text-zinc-500">Amount</span>
                   <span className="font-semibold text-zinc-900">
                     ${planDetail?.price || "40.00"}
                   </span>
